@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { HiLocationMarker } from "react-icons/hi";
-import { MdPhoneInTalk } from "react-icons/md";
+import { MdEdit, MdPhoneInTalk } from "react-icons/md";
+import { MdEditCalendar } from "react-icons/md";
 
 const Navbar = () => {
   return (
@@ -75,27 +76,35 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center bg-white">
-        <Link href="/">
-          <Image
-            src="/resources/logo.jpg"
-            alt="Logo"
-            width={100}
-            height={100}
-            className="cursor-pointer"
-          />
-        </Link>
-        <ul className="flex space-x-8 px-8 font-bold text-black">
-          <motion.li whileHover={{ scale: 1.2 }}>
-            <Link href="/">HOME</Link>
-          </motion.li>
-          <motion.li whileHover={{ scale: 1.2 }}>
-            <Link href="/about">ABOUT</Link>
-          </motion.li>
-          <motion.li whileHover={{ scale: 1.2 }}>
-            <Link href="/services">SERVICES</Link>
-          </motion.li>
-        </ul>
+      <div className="flex flex-row items-center justify-between bg-white px-4">
+        <div className="flex items-center">
+          <Link href="/">
+            <Image
+              src="/resources/logo.jpg"
+              alt="Logo"
+              width={100}
+              height={100}
+              className="cursor-pointer"
+            />
+          </Link>
+          <ul className="flex space-x-8 px-8 font-bold text-black">
+            <motion.li whileHover={{ scale: 1.2 }}>
+              <Link href="/">HOME</Link>
+            </motion.li>
+            <motion.li whileHover={{ scale: 1.2 }}>
+              <Link href="/about">ABOUT</Link>
+            </motion.li>
+            <motion.li whileHover={{ scale: 1.2 }}>
+              <Link href="/services">SERVICES</Link>
+            </motion.li>
+          </ul>
+        </div>
+        <div className="flex">
+          <motion.button className="text-md flex flex-row items-center space-x-8 rounded-xl border-2 border-black bg-white px-6 py-4 font-bold text-black">
+            Schedule an Appointment
+            <MdEditCalendar className="h-8 w-8" />
+          </motion.button>
+        </div>
       </div>
     </motion.nav>
   );
