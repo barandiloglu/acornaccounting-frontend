@@ -100,10 +100,21 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex">
-          <motion.button className="text-md flex flex-row items-center space-x-8 rounded-xl border-2 border-black bg-white px-6 py-4 font-bold text-black">
-            Schedule an Appointment
-            <MdEditCalendar className="h-8 w-8" />
-          </motion.button>
+          <Link href="/appointment">
+            <motion.button
+              className="text-md flex flex-row items-center space-x-8 rounded-xl border-2 border-[#0fa94b] bg-[#0fa94b] px-6 py-4 font-bold text-white"
+              whileHover={{
+                backgroundColor: "#176937f1", // Red background
+                color: "#FFFFFF", // White text color
+                borderColor: "#176937f1", // Red border color
+              }}
+              transition={{ ease: "easeInOut", duration: 0.3 }} // Ease in-out for smoothness
+            >
+              Schedule an Appointment
+              <MdEditCalendar className="h-8 w-8" />
+            </motion.button>
+          </Link>
+                  
         </div>
       </div>
     </motion.nav>
