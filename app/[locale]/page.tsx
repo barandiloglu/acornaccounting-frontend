@@ -53,25 +53,25 @@ export default function Home() {
         <div className="absolute inset-0 z-20 bg-black opacity-40"></div>
 
         <div className="relative z-30 flex min-h-[50vh] flex-col justify-center p-8">
-          <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-6xl">
             ACORN ACCOUNTING
           </h1>
 
           <div className="mt-10 flex flex-wrap space-x-8 text-white">
             <div className="text-center">
-              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-4xl">
                 80+
               </h2>
               <p className="text-base sm:text-lg md:text-xl">CLIENT</p>
             </div>
             <div className="text-center">
-              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-4xl">
                 170+
               </h2>
               <p className="text-base sm:text-lg md:text-xl">PROJECT</p>
             </div>
             <div className="text-center">
-              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-4xl">
                 200+
               </h2>
               <p className="text-base sm:text-lg md:text-xl">PARTNER</p>
@@ -347,7 +347,7 @@ export default function Home() {
 
       <div className="flex min-h-[20vh] w-full flex-row items-center justify-around bg-[#C2272C] py-8">
         <div className="flex flex-col items-center text-white">
-          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="text-4xl font-bold md:text-5xl lg:text-5xl xl:text-5xl">
             500+
           </h2>
           <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
@@ -356,7 +356,7 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center text-white">
-          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="text-4xl font-bold md:text-5xl lg:text-5xl xl:text-5xl">
             200+
           </h2>
           <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
@@ -365,7 +365,7 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center text-white">
-          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="text-4xl font-bold md:text-5xl lg:text-5xl xl:text-5xl">
             10+
           </h2>
           <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
