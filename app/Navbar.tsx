@@ -1,24 +1,45 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { HiLocationMarker } from "react-icons/hi";
 import { MdEdit, MdPhoneInTalk } from "react-icons/md";
 import { MdEditCalendar } from "react-icons/md";
+import { RxHamburgerMenu } from "react-icons/rx";
+
+import { MenuButton } from "./MenuButton";
+import MobileNavbar from "./MobileNavbar";
 
 const Navbar = () => {
+  const [isOpen, setOpen] = useState(false);
+
+  const canvasStyle = {
+    display: "flex",
+    width: "100vw",
+    height: "100vh",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const menuButtonStyle = {
+    marginLeft: "2rem",
+  };
+
   return (
     <motion.nav className="flex w-full flex-col">
       <div className="flex w-full justify-between bg-[#C2272C] p-4 text-white">
-        <div className="flex items-center space-x-6">
+        <div className="flex flex-col items-start space-x-0 space-y-2 xl:flex-row xl:items-center xl:space-x-6 xl:space-y-0">
           <div className="flex items-center space-x-2">
-            <HiLocationMarker className="h-10 w-10" />
-            <span>1275 Finch Ave W Suite 815, North York, ON M3J 0L5</span>
+            <HiLocationMarker className="h-8 w-8" />
+            <span className="text-sm">
+              1275 Finch Ave W Suite 815, North York, ON M3J 0L5
+            </span>
           </div>
           <div className="flex items-center space-x-2">
-            <MdPhoneInTalk className="h-10 w-10" />
-            <span>+1 (647) 468-0737</span>
+            <MdPhoneInTalk className="h-8 w-8" />
+            <span className="text-sm">+1 (647) 468-0737</span>
           </div>
         </div>
 
@@ -76,7 +97,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-between bg-white px-4">
+      <div className="flex flex-row items-center justify-between bg-white px-4 py-2">
         <div className="flex items-center">
           <Link href="/">
             <Image
@@ -87,7 +108,7 @@ const Navbar = () => {
               className="cursor-pointer"
             />
           </Link>
-          <ul className="flex space-x-8 px-8 font-bold text-black">
+          <ul className="hidden space-x-8 px-8 font-bold text-black md:flex lg:flex xl:flex">
             <motion.li whileHover={{ scale: 1.2 }}>
               <Link href="/">HOME</Link>
             </motion.li>
@@ -99,10 +120,10 @@ const Navbar = () => {
             </motion.li>
           </ul>
         </div>
-        <div className="flex">
+        <div className="flex items-center justify-center">
           <Link href="/appointment">
             <motion.button
-              className="text-md flex flex-row items-center space-x-8 rounded-xl border-2 border-[#0fa94b] bg-[#0fa94b] px-6 py-4 font-bold text-white"
+              className="text-md hidden flex-row items-center space-x-8 rounded-xl border-2 border-[#0fa94b] bg-[#0fa94b] px-6 py-4 font-bold text-white md:flex lg:flex xl:flex"
               whileHover={{
                 backgroundColor: "#176937f1", // Red background
                 color: "#FFFFFF", // White text color
@@ -114,9 +135,20 @@ const Navbar = () => {
               <MdEditCalendar className="h-8 w-8" />
             </motion.button>
           </Link>
-                  
+          <button className="z-50 flex md:hidden lg:hidden xl:hidden 2xl:hidden">
+            <MenuButton
+              isOpen={isOpen}
+              onClick={() => setOpen(!isOpen)}
+              strokeWidth="4"
+              color={isOpen ? "#FFFFFF" : "#C2272C"}
+              lineProps={{ strokeLinecap: "round" }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              style={menuButtonStyle}
+            />
+          </button>
         </div>
       </div>
+      <MobileNavbar isOpen={isOpen} setOpen={setOpen} />
     </motion.nav>
   );
 };

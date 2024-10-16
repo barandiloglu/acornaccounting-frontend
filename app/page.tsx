@@ -53,20 +53,28 @@ export default function Home() {
         <div className="absolute inset-0 z-20 bg-black opacity-40"></div>
 
         <div className="relative z-30 flex min-h-[50vh] flex-col justify-center p-8">
-          <h1 className="text-8xl font-bold text-white">ACORN ACCOUNTING</h1>
+          <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+            ACORN ACCOUNTING
+          </h1>
 
-          <div className="mt-10 flex space-x-8 text-white">
+          <div className="mt-10 flex flex-wrap space-x-8 text-white">
             <div className="text-center">
-              <h2 className="text-6xl font-bold">80+</h2>
-              <p>CLIENT</p>
+              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+                80+
+              </h2>
+              <p className="text-base sm:text-lg md:text-xl">CLIENT</p>
             </div>
             <div className="text-center">
-              <h2 className="text-6xl font-bold">170+</h2>
-              <p>PROJECT</p>
+              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+                170+
+              </h2>
+              <p className="text-base sm:text-lg md:text-xl">PROJECT</p>
             </div>
             <div className="text-center">
-              <h2 className="text-6xl font-bold">200+</h2>
-              <p>PARTNER</p>
+              <h2 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+                200+
+              </h2>
+              <p className="text-base sm:text-lg md:text-xl">PARTNER</p>
             </div>
           </div>
         </div>
@@ -89,11 +97,13 @@ export default function Home() {
             SLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. SLorem ipsum dolor sit amet,
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat.
+            aliquip ex ea commodo consequat.
+          </p>
+          <p className="text-xl">
+            SLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
           </p>
         </div>
 
@@ -240,7 +250,7 @@ export default function Home() {
 
             <h3 className="mb-4 text-2xl font-bold">CORPORATE TAX RETURNS</h3>
             <img
-              src="/resources/corporate-tax-returns.png"
+              src="/resources/estate-taxes.png"
               alt="Corporate Tax Returns"
               className="mb-4 h-1/2 rounded-md object-cover"
             />
@@ -320,7 +330,7 @@ export default function Home() {
               Accounting & Bookkeeping
             </h3>
             <img
-              src="/resources/accounting.png"
+              src="/resources/consulting.png"
               alt="Accounting"
               className="mb-4 h-1/2 rounded-md object-cover"
             />
@@ -337,18 +347,30 @@ export default function Home() {
 
       <div className="flex min-h-[20vh] w-full flex-row items-center justify-around bg-[#C2272C] py-8">
         <div className="flex flex-col items-center text-white">
-          <h2 className="text-5xl font-bold">500+</h2>
-          <p className="mt-2 text-lg">Clients Served</p>
+          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+            500+
+          </h2>
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Clients Served
+          </p>
         </div>
 
         <div className="flex flex-col items-center text-white">
-          <h2 className="text-5xl font-bold">200+</h2>
-          <p className="mt-2 text-lg">Consultations Provided</p>
+          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+            200+
+          </h2>
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Consultations Provided
+          </p>
         </div>
 
         <div className="flex flex-col items-center text-white">
-          <h2 className="text-5xl font-bold">10+</h2>
-          <p className="mt-2 text-lg">Years Experience</p>
+          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+            10+
+          </h2>
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Years Experience
+          </p>
         </div>
       </div>
     </main>

@@ -114,7 +114,9 @@ const AppointmentPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-100 py-12 text-black">
-      <h1 className="mb-8 text-4xl font-bold">Schedule an Appointment</h1>
+      <h1 className="mb-8 text-2xl font-bold md:text-3xl lg:text-3xl xl:text-4xl">
+        Schedule an Appointment
+      </h1>
 
       {showPopup && errorMessage ? (
         <PopupModal
@@ -142,7 +144,7 @@ const AppointmentPage = () => {
         )
       )}
 
-      <div className="mb-8 flex w-full max-w-4xl space-x-12 rounded-lg bg-white p-6 shadow-lg">
+      <div className="mb-8 flex w-[95%] max-w-4xl space-x-12 rounded-lg bg-white p-6 shadow-lg md:w-full lg:w-full xl:w-full">
         <div className="flex w-full flex-col space-y-4">
           <div className="flex w-full flex-row items-center">
             <label htmlFor="name" className="block w-1/2 text-lg font-medium">
@@ -207,9 +209,9 @@ const AppointmentPage = () => {
         </div>
       </div>
 
-      <div className="flex w-full max-w-4xl flex-col space-y-12 md:flex-row md:space-x-12 lg:flex-row lg:space-x-12 xl:flex-row xl:space-x-12">
+      <div className="flex w-full max-w-4xl flex-col items-center space-y-12 md:flex-row md:space-x-12 lg:flex-row lg:space-x-12 xl:flex-row xl:space-x-12">
         {/* Calendar Section */}
-        <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2">
+        <div className="w-[95%] md:w-1/2 lg:w-1/2 xl:w-1/2">
           <div className="mb-4 flex items-center justify-between">
             <button
               onClick={() => setSelectedDate(addMonths(selectedDate, -1))}
@@ -261,7 +263,7 @@ const AppointmentPage = () => {
         </div>
 
         {/* Time and Details Section */}
-        <div className="w-full rounded-lg bg-white p-6 shadow-lg md:w-1/2 lg:w-1/2 xl:w-1/2">
+        <div className="w-[95%] rounded-lg bg-white p-6 shadow-lg md:w-1/2 lg:w-1/2 xl:w-1/2">
           <div className="mb-4 text-lg font-semibold">
             {format(selectedDate, "EEEE, MMMM d")}
           </div>
@@ -278,13 +280,21 @@ const AppointmentPage = () => {
             <div className="grid grid-cols-3 gap-4">
               {[
                 { time: "09:00", display: "09:00 AM" },
+                { time: "09:30", display: "09:30 AM" },
                 { time: "10:00", display: "10:00 AM" },
+                { time: "10:30", display: "10:30 AM" },
                 { time: "11:00", display: "11:00 AM" },
+                { time: "11:30", display: "11:30 AM" },
                 { time: "12:00", display: "12:00 PM" },
+                { time: "12:30", display: "12:30 PM" },
                 { time: "13:00", display: "01:00 PM" },
+                { time: "13:30", display: "01:30 PM" },
                 { time: "14:00", display: "02:00 PM" },
+                { time: "14:30", display: "02:30 PM" },
                 { time: "15:00", display: "03:00 PM" },
+                { time: "15:30", display: "03:30 PM" },
                 { time: "16:00", display: "04:00 PM" },
+                { time: "16:30", display: "04:30 PM" },
                 { time: "17:00", display: "05:00 PM" },
               ].map(({ time, display }) => (
                 <button
