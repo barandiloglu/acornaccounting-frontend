@@ -3,12 +3,16 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+import { useTranslations } from "next-intl";
+
 interface MobileNavbarProps {
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
 }
 
 const MobileNavbar = ({ isOpen, setOpen }: MobileNavbarProps) => {
+  const t = useTranslations("navbar");
+
   const containerVariants = {
     open: {
       y: 0,
@@ -41,22 +45,24 @@ const MobileNavbar = ({ isOpen, setOpen }: MobileNavbarProps) => {
       <motion.div className="flex h-full flex-col items-center justify-center space-y-10">
         <motion.div variants={itemVariants}>
           <Link href="/" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">HOME</h2>
+            <h2 className="text-2xl font-bold">{t("navbarHome")}</h2>
           </Link>
         </motion.div>
         <motion.div variants={itemVariants}>
           <Link href="/about" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">ABOUT</h2>
+            <h2 className="text-2xl font-bold">{t("navbarAbout")}</h2>
           </Link>
         </motion.div>
         <motion.div variants={itemVariants}>
           <Link href="/services" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">SERVICES</h2>
+            <h2 className="text-2xl font-bold">{t("navbarServices")}</h2>
           </Link>
         </motion.div>
         <motion.div variants={itemVariants}>
           <Link href="/appointment" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">SCHEDULE AN APPOINTMENT</h2>
+            <h2 className="text-2xl font-bold uppercase">
+              {t("navbarAppointment")}
+            </h2>
           </Link>
         </motion.div>
       </motion.div>

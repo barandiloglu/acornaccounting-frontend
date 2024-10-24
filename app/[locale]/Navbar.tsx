@@ -5,14 +5,17 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { HiLocationMarker } from "react-icons/hi";
-import { MdEdit, MdPhoneInTalk } from "react-icons/md";
+import { MdPhoneInTalk } from "react-icons/md";
 import { MdEditCalendar } from "react-icons/md";
-import { RxHamburgerMenu } from "react-icons/rx";
 
 import { MenuButton } from "./MenuButton";
 import MobileNavbar from "./MobileNavbar";
 
+import { useTranslations } from "next-intl";
+
 const Navbar = () => {
+  const t = useTranslations("navbar");
+
   const [isOpen, setOpen] = useState(false);
 
   const canvasStyle = {
@@ -110,13 +113,13 @@ const Navbar = () => {
           </Link>
           <ul className="hidden space-x-8 px-8 font-bold text-black md:flex lg:flex xl:flex">
             <motion.li whileHover={{ scale: 1.2 }}>
-              <Link href="/">HOME</Link>
+              <Link href="/">{t("navbarHome")}</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.2 }}>
-              <Link href="/about">ABOUT</Link>
+              <Link href="/about">{t("navbarAbout")}</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.2 }}>
-              <Link href="/services">SERVICES</Link>
+              <Link href="/services">{t("navbarServices")}</Link>
             </motion.li>
           </ul>
         </div>
@@ -131,7 +134,7 @@ const Navbar = () => {
               }}
               transition={{ ease: "easeInOut", duration: 0.3 }} // Ease in-out for smoothness
             >
-              Schedule an Appointment
+              {t("navbarAppointment")}
               <MdEditCalendar className="h-8 w-8" />
             </motion.button>
           </Link>
