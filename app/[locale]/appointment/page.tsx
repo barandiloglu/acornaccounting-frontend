@@ -109,7 +109,6 @@ const AppointmentPage = () => {
   };
 
   const days = getDaysInMonth(selectedDate);
-
   const today = startOfToday();
 
   return (
@@ -146,6 +145,7 @@ const AppointmentPage = () => {
 
       <div className="mb-8 flex w-[95%] max-w-4xl space-x-12 rounded-lg bg-white p-6 shadow-lg md:w-full lg:w-full xl:w-full">
         <div className="flex w-full flex-col space-y-4">
+          {/* Name Field */}
           <div className="flex w-full flex-row items-center">
             <label htmlFor="name" className="block w-1/2 text-lg font-medium">
               Name:
@@ -160,6 +160,7 @@ const AppointmentPage = () => {
               required
             />
           </div>
+          {/* Email Field */}
           <div className="flex w-full flex-row items-center">
             <label htmlFor="email" className="block w-1/2 text-lg font-medium">
               Email:
@@ -183,6 +184,7 @@ const AppointmentPage = () => {
               } // Reset message after input
             />
           </div>
+          {/* Phone Number Field */}
           <div className="flex w-full flex-row items-center">
             <label htmlFor="phone" className="block w-1/2 text-lg font-medium">
               Phone Number:
@@ -199,7 +201,7 @@ const AppointmentPage = () => {
                 }}
                 containerClass="w-full"
                 inputClass="w-full p-6 rounded-lg border border-gray-300"
-                buttonClass="rounded-l-lg" // To ensure the country flag matches the style
+                buttonClass="rounded-l-lg"
                 placeholder="Enter your phone number"
                 enableSearch={true}
                 inputStyle={{ width: "100%" }}
@@ -232,8 +234,8 @@ const AppointmentPage = () => {
 
           {/* Days of the Week Header */}
           <div className="grid grid-cols-7 gap-2 text-center font-semibold">
-            {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
-              <span key={day}>{day}</span>
+            {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+              <span key={day + index}>{day}</span> 
             ))}
           </div>
 

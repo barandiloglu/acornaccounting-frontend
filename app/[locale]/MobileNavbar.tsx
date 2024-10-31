@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -12,6 +13,14 @@ interface MobileNavbarProps {
 
 const MobileNavbar = ({ isOpen, setOpen }: MobileNavbarProps) => {
   const t = useTranslations("navbar");
+
+  // Track if the component has mounted
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Ensure animations only run after the component is mounted on the client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const containerVariants = {
     open: {
@@ -36,37 +45,39 @@ const MobileNavbar = ({ isOpen, setOpen }: MobileNavbarProps) => {
   };
 
   return (
-    <motion.div
-      initial="closed"
-      animate={isOpen ? "open" : "closed"}
-      variants={containerVariants}
-      className="fixed left-0 top-0 z-40 h-screen w-full bg-[#C2272C] text-white"
-    >
-      <motion.div className="flex h-full flex-col items-center justify-center space-y-10">
-        <motion.div variants={itemVariants}>
-          <Link href="/" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">{t("navbarHome")}</h2>
-          </Link>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <Link href="/about" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">{t("navbarAbout")}</h2>
-          </Link>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <Link href="/services" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold">{t("navbarServices")}</h2>
-          </Link>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <Link href="/appointment" onClick={() => setOpen(false)}>
-            <h2 className="text-2xl font-bold uppercase">
-              {t("navbarAppointment")}
-            </h2>
-          </Link>
+    isMounted && (
+      <motion.div
+        initial="closed"
+        animate={isOpen ? "open" : "closed"}
+        variants={containerVariants}
+        className="fixed left-0 top-0 z-40 h-screen w-full bg-[#C2272C] text-white"
+      >
+        <motion.div className="flex h-full flex-col items-center justify-center space-y-10">
+          <motion.div variants={itemVariants}>
+            <Link href="/" onClick={() => setOpen(false)}>
+              <h2 className="text-2xl font-bold">{t("navbarHome")}</h2>
+            </Link>
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <Link href="/about" onClick={() => setOpen(false)}>
+              <h2 className="text-2xl font-bold">{t("navbarAbout")}</h2>
+            </Link>
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <Link href="/services" onClick={() => setOpen(false)}>
+              <h2 className="text-2xl font-bold">{t("navbarServices")}</h2>
+            </Link>
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <Link href="/appointment" onClick={() => setOpen(false)}>
+              <h2 className="text-2xl font-bold uppercase">
+                {t("navbarAppointment")}
+              </h2>
+            </Link>
+          </motion.div>
         </motion.div>
       </motion.div>
-    </motion.div>
+    )
   );
 };
 

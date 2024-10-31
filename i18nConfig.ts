@@ -1,6 +1,6 @@
 const i18nConfig = {
-  locales: ["en", "tr"], // Add other supported languages
-  defaultLocale: "en", // Set the default language
+  locales: ["en", "tr"],
+  defaultLocale: "en",
 };
 
 export default i18nConfig;

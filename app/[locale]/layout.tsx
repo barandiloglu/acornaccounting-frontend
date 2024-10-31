@@ -8,37 +8,42 @@ import "./globals.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter ({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "Acorn Accounting", // Website name shown in the tab
+  description: "Professional Accounting Services for Small and Medium Businesses.", // Website description
+  icons: {
+    icon: "/favicon.ico", // Reference to your favicon file
+  },
+};
 
 export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: "en" | "tr" }>; // Awaitable params
 }) {
-  // Ensure that the incoming `locale` is valid
-  if (!routing.locales.includes(locale as any)) {
+  const { locale } = await params; // Await the params before destructuring
+
+  if (!["en", "tr"].includes(locale)) {
     notFound();
   }
 
-  // Providing all messages to the client side is the easiest way to get started
-  const messages = await getMessages();
+  // Pass the locale as an object to getMessages
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <NextIntlClientProvider messages={messages}>
-          {/* Include the Navbar at the top */}
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
-
-          {/* Main content for each page */}
           <main>{children}</main>
-
-          {/* Include the Footer at the bottom */}
           <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
   );
 }
+

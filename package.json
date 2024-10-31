@@ -9,14 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@internationalized/date": "^3.5.6",
+    "@nextui-org/react": "^2.4.8",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.7.0",
     "i18next": "^23.16.0",
     "i18next-resources-to-backend": "^1.2.1",
     "libphonenumber-js": "^1.11.10",
-    "next": "14.2.5",
+    "next": "^14.2.5",
     "next-i18n-router": "^5.5.1",
     "next-intl": "^3.22.0",
+    "nookies": "^2.5.2",
     "react": "^18",
     "react-dom": "^18",
     "react-i18next": "^15.0.3",

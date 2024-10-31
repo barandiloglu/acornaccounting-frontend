@@ -3,7 +3,6 @@ import { routing } from "./routing";
 import fs from "fs";
 import path from "path";
 
-// Helper function to dynamically load all JSON files in the locale folder
 async function loadLocaleMessages(locale: string) {
   const localeDir = path.resolve(`./locales/${locale}`);
   const messages: Record<string, any> = {};
@@ -21,15 +20,12 @@ async function loadLocaleMessages(locale: string) {
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
-  // This typically corresponds to the `[locale]` segment
   let locale = await requestLocale;
 
-  // Ensure that a valid locale is used
   if (!locale || !routing.locales.includes(locale as any)) {
     locale = routing.defaultLocale;
   }
 
-  // Dynamically load all JSON files in the locale directory
   const messages = await loadLocaleMessages(locale);
 
   return {

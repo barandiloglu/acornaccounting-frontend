@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,17 +13,37 @@ import MobileNavbar from "./MobileNavbar";
 
 import { useTranslations } from "next-intl";
 
+import { useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import i18next from "i18next";
+import nookies from "nookies";
+
 const Navbar = () => {
   const t = useTranslations("navbar");
 
+  const [currentLocale, setCurrentLocale] = useState("en");
   const [isOpen, setOpen] = useState(false);
 
-  const canvasStyle = {
-    display: "flex",
-    width: "100vw",
-    height: "100vh",
-    alignItems: "center",
-    justifyContent: "center",
+  const router = useRouter();
+  const pathname = usePathname(); // For current path
+  const searchParams = useSearchParams(); // For query params
+
+  useEffect(() => {
+    const cookies = nookies.get();
+    const localeFromCookies = cookies.locale || "en"; // Default to 'en' if no cookie is set
+    const localeFromPath = pathname.split("/")[1];
+    setCurrentLocale(localeFromPath || localeFromCookies);
+  }, [pathname]);
+
+  const changeLanguage = (locale: string) => {
+    setCurrentLocale(locale);
+    nookies.set(null, "locale", locale, { path: "/" }); // Set the locale cookie
+
+    const segments = pathname.split("/");
+    segments[1] = locale;
+    const newPathname = segments.join("/");
+    router.push(`${newPathname}?${searchParams}`);
   };
 
   const menuButtonStyle = {
@@ -57,7 +77,7 @@ const Navbar = () => {
                   .classList.toggle("hidden");
               }}
             >
-              <span>English</span>
+              <span>{currentLocale === "en" ? "English" : "Türkçe"}</span>{" "}
               <motion.div whileHover={{ rotate: 180 }}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +95,15 @@ const Navbar = () => {
               id="language-dropdown"
               className="absolute right-0 mt-2 hidden w-32 rounded-lg border border-gray-200 bg-white text-black shadow-lg"
             >
-              <li className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-200">
+              <li
+                className="flex cursor-pointer items-center px-4 py-2 hover:rounded-t-lg hover:bg-gray-200"
+                onClick={() => {
+                  changeLanguage("en");
+                  document
+                    .getElementById("language-dropdown")!
+                    .classList.add("hidden");
+                }}
+              >
                 <Image
                   src="/resources/united-kingdom.png"
                   alt="UK Flag"
@@ -85,7 +113,15 @@ const Navbar = () => {
                 />
                 <span>English</span>
               </li>
-              <li className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-200">
+              <li
+                className="flex cursor-pointer items-center px-4 py-2 hover:rounded-b-lg hover:bg-gray-200"
+                onClick={() => {
+                  changeLanguage("tr");
+                  document
+                    .getElementById("language-dropdown")!
+                    .classList.add("hidden");
+                }}
+              >
                 <Image
                   src="/resources/turkey.png"
                   alt="Turkey Flag"
@@ -113,7 +149,7 @@ const Navbar = () => {
           </Link>
           <ul className="hidden space-x-8 px-8 font-bold text-black md:flex lg:flex xl:flex">
             <motion.li whileHover={{ scale: 1.2 }}>
-              <Link href="/">{t("navbarHome")}</Link>
+              <Link href={`/${currentLocale}`}>{t("navbarHome")}</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.2 }}>
               <Link href="/about">{t("navbarAbout")}</Link>
@@ -124,20 +160,21 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex items-center justify-center">
-          <Link href="/appointment">
+          <Link href={`/${currentLocale}/appointment`}>
             <motion.button
               className="text-md hidden flex-row items-center space-x-8 rounded-xl border-2 border-[#0fa94b] bg-[#0fa94b] px-6 py-4 font-bold text-white md:flex lg:flex xl:flex"
               whileHover={{
-                backgroundColor: "#176937f1", // Red background
-                color: "#FFFFFF", // White text color
-                borderColor: "#176937f1", // Red border color
+                backgroundColor: "#176937f1",
+                color: "#FFFFFF",
+                borderColor: "#176937f1",
               }}
-              transition={{ ease: "easeInOut", duration: 0.3 }} // Ease in-out for smoothness
+              transition={{ ease: "easeInOut", duration: 0.3 }}
             >
               {t("navbarAppointment")}
               <MdEditCalendar className="h-8 w-8" />
             </motion.button>
           </Link>
+
           <button className="z-50 flex md:hidden lg:hidden xl:hidden 2xl:hidden">
             <MenuButton
               isOpen={isOpen}
