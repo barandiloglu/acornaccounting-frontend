@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -13,7 +13,27 @@ import { IoIosClose, IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { TiTick } from "react-icons/ti";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import nookies from "nookies";
+
 const FormStep = () => {
+  const t = useTranslations("register");
+
+  const [currentLocale, setCurrentLocale] = useState("en");
+  const router = useRouter();
+  const pathname = usePathname(); // For current path
+  const searchParams = useSearchParams(); // For query params
+
+  useEffect(() => {
+    const cookies = nookies.get();
+    const localeFromCookies = cookies.locale || "en"; // Default to 'en' if no cookie is set
+    const localeFromPath = pathname.split("/")[1];
+    setCurrentLocale(localeFromPath || localeFromCookies);
+  }, [pathname]);
+
   const [step, setStep] = useState(1);
 
   const handlePreviousStep = () => {
@@ -173,7 +193,7 @@ const FormStep = () => {
                     className="w-full p-6 uppercase"
                     onClick={() => setFormType("register")}
                   >
-                    Register
+                    {t("register")}
                   </button>
                 </div>
                 <div
@@ -187,7 +207,7 @@ const FormStep = () => {
                     className="w-full p-6 uppercase"
                     onClick={() => setFormType("login")}
                   >
-                    Login
+                    {t("login")}
                   </button>
                 </div>
               </div>
@@ -205,9 +225,11 @@ const FormStep = () => {
                         1
                       </motion.div>
                       <div className="flex flex-col">
-                        <span className="text-xs font-light">STEP 1</span>
+                        <span className="text-xs font-light">
+                          {t("step_one")}
+                        </span>
                         <span className="text-base font-semibold uppercase">
-                          Personal Info
+                          {t("personal_info")}
                         </span>
                       </div>
                     </div>
@@ -225,9 +247,11 @@ const FormStep = () => {
                         2
                       </motion.div>
                       <div className="flex flex-col">
-                        <span className="text-xs font-light">STEP 2</span>
+                        <span className="text-xs font-light">
+                          {t("step_two")}
+                        </span>
                         <span className="text-base font-semibold uppercase">
-                          Login Info
+                          {t("login_info")}
                         </span>
                       </div>
                     </div>
@@ -245,9 +269,11 @@ const FormStep = () => {
                         3
                       </motion.div>
                       <div className="flex flex-col">
-                        <span className="text-xs font-light">STEP 3</span>
+                        <span className="text-xs font-light">
+                          {t("step_three")}
+                        </span>
                         <span className="text-base font-semibold uppercase">
-                          Review
+                          {t("review")}
                         </span>
                       </div>
                     </div>
@@ -260,7 +286,7 @@ const FormStep = () => {
                     <div className="flex flex-col">
                       <div className="flex flex-row justify-between">
                         <h2 className="text-2xl font-bold text-gray-800">
-                          Personal Info
+                          {t("personal_info")}
                         </h2>
                         {step > 1 && (
                           <motion.div
@@ -276,15 +302,15 @@ const FormStep = () => {
                       </div>
 
                       <p className="mb-6 text-gray-500">
-                        Please provide your name, date of birth, and phone
-                        number.
+                        {t("login_info_details")}
                       </p>
                       <form className="space-y-4">
                         {/* Form fields for Personal Info */}
                         <div className="flex w-full gap-4">
                           <div className="w-1/2">
                             <label className="mb-1 block text-black">
-                              First Name <span className="text-red-500">*</span>
+                              {t("first_name")}{" "}
+                              <span className="text-red-500">*</span>
                             </label>
                             <input
                               type="text"
@@ -302,7 +328,7 @@ const FormStep = () => {
                           </div>
                           <div className="w-1/2">
                             <label className="mb-1 block text-black">
-                              Middle Name
+                              {t("middle_name")}
                             </label>
                             <input
                               type="text"
@@ -316,7 +342,8 @@ const FormStep = () => {
                         </div>
                         <div>
                           <label className="mb-1 block text-black">
-                            Last Name <span className="text-red-500">*</span>
+                            {t("last_name")}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="text"
@@ -334,7 +361,7 @@ const FormStep = () => {
                         </div>
                         <div className="text-black">
                           <DatePicker
-                            label="Date of Birth"
+                            label={t("date_of_birth")}
                             classNames={{
                               base: "rounded-lg ",
                               selectorButton: "bg-[#C2272C] text-white",
@@ -372,7 +399,8 @@ const FormStep = () => {
                         </div>
                         <div>
                           <label className="mb-1 block text-black">
-                            Phone Number <span className="text-red-500">*</span>
+                            {t("phone_number")}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <PhoneInput
                             country={"ca"}
@@ -424,7 +452,7 @@ const FormStep = () => {
                     <div className="flex flex-col">
                       <div className="flex flex-row justify-between">
                         <h2 className="text-2xl font-bold text-gray-800">
-                          Login Info
+                          {t("login_info")}
                         </h2>
                         {step > 1 && (
                           <motion.div
@@ -439,13 +467,12 @@ const FormStep = () => {
                         )}
                       </div>
                       <p className="mb-6 text-gray-500">
-                        Please provide your email, and set a password for your
-                        account.
+                        {t("login_info_details")}
                       </p>
                       <form className="space-y-6">
                         <div className="relative">
                           <label className="mb-1 block text-black">
-                            Email <span className="text-red-500">*</span>
+                            {t("email")} <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="email"
@@ -463,13 +490,14 @@ const FormStep = () => {
                           <p
                             className={`absolute top-full mt-1 flex items-center text-xs ${validationErrors.email ? "text-red-500" : "invisible"}`}
                           >
-                            Enter a valid email address.
+                            {t("email_error")}
                           </p>
                         </div>
 
                         <div className="relative">
                           <label className="mb-1 block text-black">
-                            Password <span className="text-red-500">*</span>
+                            {t("password")}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
                             <input
@@ -494,15 +522,13 @@ const FormStep = () => {
                             </div>
                           </div>
                           <p className="pt-1 text-xs text-gray-500">
-                            Passwords must have at least 8 characters and
-                            contain one uppercase letter, one number, and one
-                            symbol.
+                            {t("password_details")}
                           </p>
                           <p
                             className={`flex items-center pt-1 text-xs ${requirements.hasMin ? "text-green-600" : "text-red-600"}`}
                           >
                             {requirements.hasMin ? <TiTick /> : <IoIosClose />}{" "}
-                            Minimum 8 Characters
+                            {t("password_subdetail_1")}
                           </p>
                           <p
                             className={`flex items-center pt-1 text-xs ${requirements.hasUppercase ? "text-green-600" : "text-red-600"}`}
@@ -512,7 +538,7 @@ const FormStep = () => {
                             ) : (
                               <IoIosClose />
                             )}{" "}
-                            Uppercase
+                            {t("password_subdetail_2")}
                           </p>
                           <p
                             className={`flex items-center pt-1 text-xs ${requirements.hasNumber ? "text-green-600" : "text-red-600"}`}
@@ -522,7 +548,7 @@ const FormStep = () => {
                             ) : (
                               <IoIosClose />
                             )}{" "}
-                            Number
+                            {t("password_subdetail_3")}
                           </p>
                           <p
                             className={`flex items-center pt-1 text-xs ${requirements.hasSymbol ? "text-green-600" : "text-red-600"}`}
@@ -532,19 +558,19 @@ const FormStep = () => {
                             ) : (
                               <IoIosClose />
                             )}{" "}
-                            Symbol
+                            {t("password_subdetail_4")}
                           </p>
                           {formData.password.length >= 8 &&
                             !passwordMeetsRequirements(formData.password) && (
                               <p className="text-xs text-red-600">
-                                Password does not meet requirements
+                                {t("password_error")}
                               </p>
                             )}
                         </div>
 
                         <div className="relative">
                           <label className="mb-1 block text-black">
-                            Retype Password{" "}
+                            {t("retype_password")}{" "}
                             <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
@@ -583,8 +609,8 @@ const FormStep = () => {
                             >
                               {passwordMatch ? <TiTick /> : <IoIosClose />}
                               {passwordMatch
-                                ? "Passwords match"
-                                : "Passwords do not match"}
+                                ? t("passwords_match")
+                                : t("passwords_not_match")}
                             </p>
                           )}
                         </div>
@@ -596,7 +622,7 @@ const FormStep = () => {
                     <div className="flex flex-col">
                       <div className="flex flex-row justify-between">
                         <h2 className="text-2xl font-bold text-gray-800">
-                          Review
+                          {t("review")}
                         </h2>
                         {step > 1 && (
                           <motion.div
@@ -611,19 +637,19 @@ const FormStep = () => {
                         )}
                       </div>
                       <p className="mb-6 text-gray-500">
-                        Please check if provided information is correct.
+                        {t("review_details")}
                       </p>
                       <div className="flex flex-col space-y-8">
                         <div className="flex flex-row">
                           <div className="flex w-1/2">
                             <label className="mb-1 mr-2 block font-bold text-black">
-                              Name:{" "}
+                              {t("first_name") + ":"}
                             </label>
                             <p>{formData.firstName}</p>
                           </div>
                           <div className="mr-2 flex w-1/2 flex-row">
                             <label className="mb-1 mr-2 block font-bold text-black">
-                              Middle Name:
+                              {t("middle_name") + ":"}
                             </label>
                             <p>{formData.middleName}</p>
                           </div>
@@ -631,25 +657,25 @@ const FormStep = () => {
 
                         <div className="flex flex-row">
                           <label className="mb-1 mr-2 block font-bold text-black">
-                            Last Name:{" "}
+                            {t("last_name") + ":"}
                           </label>
                           <p>{formData.lastName}</p>
                         </div>
                         <div className="flex flex-row">
                           <label className="mb-1 mr-2 block font-bold text-black">
-                            Date of Birth:
+                            {t("date_of_birth") + ":"}
                           </label>
                           <p>{formData.dateOfBirth}</p>
                         </div>
                         <div className="flex flex-row">
                           <label className="mb-1 mr-2 block font-bold text-black">
-                            Phone Number:
+                            {t("phone_number") + ":"}
                           </label>
                           <p>{formData.phone}</p>
                         </div>
                         <div className="flex flex-row">
                           <label className="mb-1 mr-2 block font-bold text-black">
-                            Email:{" "}
+                            {t("email") + ":"}
                           </label>
                           <p>{formData.email}</p>
                         </div>
@@ -663,7 +689,7 @@ const FormStep = () => {
                       onClick={handleNextStep}
                       className="rounded-md bg-[#C2272C] px-6 py-2 text-white hover:bg-red-700 focus:outline-none"
                     >
-                      {step !== 3 ? "Next Step" : "Submit"}
+                      {step !== 3 ? t("next_step") : t("submit")}
                     </button>
                   </div>
                 </div>
@@ -693,7 +719,7 @@ const FormStep = () => {
                     className="w-full p-6 uppercase"
                     onClick={() => setFormType("register")}
                   >
-                    Register
+                    {t("register")}
                   </button>
                 </div>
                 <div
@@ -707,7 +733,7 @@ const FormStep = () => {
                     className="w-full p-6 uppercase"
                     onClick={() => setFormType("login")}
                   >
-                    Login
+                    {t("login")}
                   </button>
                 </div>
               </div>
@@ -732,7 +758,7 @@ const FormStep = () => {
                   <div className="flex flex-col">
                     <div className="mb-6 flex flex-row justify-between">
                       <h2 className="text-2xl font-bold text-gray-800">
-                        Login
+                        {t("login")}
                       </h2>
                     </div>
 
@@ -757,12 +783,12 @@ const FormStep = () => {
                         <p
                           className={`top-full mt-1 flex items-center text-xs ${validationErrors.email ? "text-red-500" : "invisible"}`}
                         >
-                          Enter a valid email address.
+                          {t("email_error")}
                         </p>
                       </div>
                       <div className="relative">
                         <label className="mb-1 block text-black">
-                          Password
+                          {t("password")}
                         </label>
                         <div className="relative">
                           <input
@@ -796,7 +822,7 @@ const FormStep = () => {
                       onClick={handleLogin}
                       className="rounded-md bg-[#C2272C] px-6 py-2 text-white hover:bg-red-700 focus:outline-none"
                     >
-                      Login
+                      {t("login")}
                     </button>
                   </div>
                 </div>

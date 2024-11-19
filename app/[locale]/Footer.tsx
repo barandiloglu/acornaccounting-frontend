@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -9,8 +10,25 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 
+import { useTranslations } from "next-intl";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import nookies from "nookies";
+
 const Footer = () => {
   const year = new Date().getFullYear();
+
+  const t = useTranslations("footer");
+
+  const [currentLocale, setCurrentLocale] = useState("en");
+  const pathname = usePathname(); // For current path
+
+  useEffect(() => {
+    const cookies = nookies.get();
+    const localeFromCookies = cookies.locale || "en"; // Default to 'en' if no cookie is set
+    const localeFromPath = pathname.split("/")[1];
+    setCurrentLocale(localeFromPath || localeFromCookies);
+  }, [pathname]);
 
   return (
     <>
@@ -39,7 +57,7 @@ const Footer = () => {
 
         <div className="mt-8 flex w-full flex-col items-center lg:mt-0 lg:w-1/4">
           <h2 className="py-4 text-xl font-bold uppercase text-black">
-            GET IN TOUCH
+            {t("footerContact")}
           </h2>
           <ul className="text-md space-y-4 font-medium text-black">
             <li className="flex items-center space-x-2">
@@ -70,7 +88,7 @@ const Footer = () => {
 
       <div className="w-full bg-white py-4 text-center">
         <p className="text-sm text-gray-500">
-          © {year} ACORN ACCOUNTING - All rights reserved
+          © {year} ACORN ACCOUNTING - {t("footerCopyright")}
         </p>
       </div>
     </>

@@ -16,7 +16,6 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import i18next from "i18next";
 import nookies from "nookies";
 
 const Navbar = () => {

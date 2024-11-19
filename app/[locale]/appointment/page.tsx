@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -16,10 +16,33 @@ import {
   startOfToday,
 } from "date-fns";
 
+import { tr, enUS } from "date-fns/locale";
+
 import { FaExclamation } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 
+import { useTranslations } from "next-intl";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import nookies from "nookies";
+
 const AppointmentPage = () => {
+  const t = useTranslations("appointment");
+
+  const [currentLocale, setCurrentLocale] = useState("en");
+  const pathname = usePathname(); // For current path
+
+  const getLocale = (currentLocale: string) => {
+    return currentLocale === "tr" ? tr : enUS; // Default to English if not Turkish
+  };
+
+  useEffect(() => {
+    const cookies = nookies.get();
+    const localeFromCookies = cookies.locale || "en"; // Default to 'en' if no cookie is set
+    const localeFromPath = pathname.split("/")[1];
+    setCurrentLocale(localeFromPath || localeFromCookies);
+  }, [pathname]);
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState("13:00");
   const [name, setName] = useState("");
@@ -57,7 +80,7 @@ const AppointmentPage = () => {
   const handleSubmit = () => {
     // Validate name
     if (name.trim() === "") {
-      setErrorMessage("Please enter your name.");
+      setErrorMessage(t("name_error"));
       setShowPopup(true);
       return;
     }
@@ -65,21 +88,21 @@ const AppointmentPage = () => {
     // Validate email
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
     if (!emailPattern.test(email)) {
-      setErrorMessage("Please enter a valid email address.");
+      setErrorMessage(t("email_error"));
       setShowPopup(true);
       return;
     }
 
     // Validate phone
     if (phone.trim() === "") {
-      setErrorMessage("Please enter your phone number.");
+      setErrorMessage(t("phone_error"));
       setShowPopup(true);
       return;
     }
 
     // Validate if time is selected
     if (!selectedTime) {
-      setErrorMessage("Please select a time.");
+      setErrorMessage(t("time_error"));
       setShowPopup(true);
       return;
     }
@@ -114,12 +137,12 @@ const AppointmentPage = () => {
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-100 py-12 text-black">
       <h1 className="mb-8 text-2xl font-bold md:text-3xl lg:text-3xl xl:text-4xl">
-        Schedule an Appointment
+        {t("schedule_appointment")}
       </h1>
 
       {showPopup && errorMessage ? (
         <PopupModal
-          title="Error"
+          title={t("error")}
           message={errorMessage}
           isError={true}
           onCancel={() => setShowPopup(false)}
@@ -127,7 +150,7 @@ const AppointmentPage = () => {
       ) : (
         showPopup && (
           <PopupModal
-            title="Confirm Your Appointment"
+            title={t("confirmation")}
             message={`Are you sure you want to book your appointment with the following details?<br />
         <strong>Name:</strong> ${appointmentDetails.name}<br />
         <strong>Email:</strong> ${appointmentDetails.email}<br />
@@ -148,7 +171,7 @@ const AppointmentPage = () => {
           {/* Name Field */}
           <div className="flex w-full flex-row items-center">
             <label htmlFor="name" className="block w-1/2 text-lg font-medium">
-              Name:
+              {t("full_name") + ":"}
             </label>
             <input
               type="text"
@@ -163,7 +186,7 @@ const AppointmentPage = () => {
           {/* Email Field */}
           <div className="flex w-full flex-row items-center">
             <label htmlFor="email" className="block w-1/2 text-lg font-medium">
-              Email:
+              {t("email") + ":"}
             </label>
             <input
               type="email"
@@ -187,7 +210,7 @@ const AppointmentPage = () => {
           {/* Phone Number Field */}
           <div className="flex w-full flex-row items-center">
             <label htmlFor="phone" className="block w-1/2 text-lg font-medium">
-              Phone Number:
+              {t("phone_number") + ":"}
             </label>
             <div className="flex w-full">
               <PhoneInput
@@ -219,27 +242,32 @@ const AppointmentPage = () => {
               onClick={() => setSelectedDate(addMonths(selectedDate, -1))}
               className="text-lg font-bold"
             >
-              {"<"} {format(addMonths(selectedDate, -1), "MMMM")}
+              {"<"}{" "}
+              {format(addMonths(selectedDate, -1), "MMMM", {
+                locale: getLocale(currentLocale),
+              })}
             </button>
             <span className="text-xl font-semibold">
-              {format(selectedDate, "MMMM yyyy")}
+              {format(selectedDate, "MMMM yyyy", {
+                locale: getLocale(currentLocale),
+              })}
             </span>
             <button
               onClick={() => setSelectedDate(addMonths(selectedDate, 1))}
               className="text-lg font-bold"
             >
-              {format(addMonths(selectedDate, 1), "MMMM")} {">"}
+              {format(addMonths(selectedDate, 1), "MMMM", {
+                locale: getLocale(currentLocale),
+              }) + ">"}
             </button>
           </div>
 
-          {/* Days of the Week Header */}
           <div className="grid grid-cols-7 gap-2 text-center font-semibold">
             {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
-              <span key={day + index}>{day}</span> 
+              <span key={day + index}>{day}</span>
             ))}
           </div>
 
-          {/* Days in the Month */}
           <div className="mt-2 grid grid-cols-7 gap-2">
             {days.map((day, index) => {
               const isDayBeforeToday = isBefore(day, today);
@@ -267,17 +295,19 @@ const AppointmentPage = () => {
         {/* Time and Details Section */}
         <div className="w-[95%] rounded-lg bg-white p-6 shadow-lg md:w-1/2 lg:w-1/2 xl:w-1/2">
           <div className="mb-4 text-lg font-semibold">
-            {format(selectedDate, "EEEE, MMMM d")}
+            {format(selectedDate, "EEEE, MMMM d", {
+              locale: getLocale(currentLocale),
+            })}
           </div>
           <div className="mb-4 text-sm">
-            <span className="font-semibold">Time Zone:</span> EASTERN TIME -
-            TORONTO (GMT-04:00)
+            <span className="font-semibold">{t("time_zone") + ":"}</span>{" "}
+            EASTERN TIME - TORONTO (GMT-04:00)
           </div>
 
           {/* Time Selector */}
           <div className="mb-6">
             <label className="mb-2 block text-lg font-medium">
-              Select Time
+              {t("select_time")}
             </label>
             <div className="grid grid-cols-3 gap-4">
               {[
@@ -320,7 +350,7 @@ const AppointmentPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Confirm Appointment
+            {t("confirm")}
           </motion.button>
         </div>
       </div>

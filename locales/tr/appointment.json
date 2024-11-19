@@ -1,0 +1,18 @@
+{
+  "confirm": "Randevuyu Onayla",
+  "confirmation": "Randevunuzu Onaylayın\n",
+  "confirmation_detail": "Aşağıdaki bilgilerle randevunuzu almak istediğinizden emin misiniz?",
+  "date": "Tarih",
+  "email": "E-posta",
+  "email_error": "Lütfen geçerli bir e-posta adresi giriniz.",
+  "error": "Hata",
+  "full_name": "Ad Soyad",
+  "name_error": "Lütfen adınızı giriniz.",
+  "phone_error": "Lütfen telefon numaranızı giriniz.",
+  "phone_number": "Telefon Numarası",
+  "schedule_appointment": "Randevu Planla",
+  "select_time": "Randevu Zamanı",
+  "time": "Saat",
+  "time_error": "Lütfen bir zaman seçin.",
+  "time_zone": "Zaman Dilimi"
+}
