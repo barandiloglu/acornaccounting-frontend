@@ -8,8 +8,8 @@ import { HiLocationMarker } from "react-icons/hi";
 import { MdPhoneInTalk } from "react-icons/md";
 import { MdEditCalendar } from "react-icons/md";
 
-import { MenuButton } from "./MenuButton";
-import MobileNavbar from "./MobileNavbar";
+import { MenuButton } from "../[locale]/MenuButton";
+import MobileNavbar from "../[locale]/MobileNavbar";
 
 import { useTranslations } from "next-intl";
 
@@ -23,6 +23,8 @@ const Navbar = () => {
 
   const [currentLocale, setCurrentLocale] = useState("en");
   const [isOpen, setOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false); // State for login modal
 
   const router = useRouter();
   const pathname = usePathname(); // For current path
@@ -33,6 +35,9 @@ const Navbar = () => {
     const localeFromCookies = cookies.locale || "en"; // Default to 'en' if no cookie is set
     const localeFromPath = pathname.split("/")[1];
     setCurrentLocale(localeFromPath || localeFromCookies);
+
+    const token = cookies.token; // Assuming `token` is the login token
+    setIsLoggedIn(!!token);
   }, [pathname]);
 
   const changeLanguage = (locale: string) => {
@@ -44,6 +49,15 @@ const Navbar = () => {
     const newPathname = segments.join("/");
     router.push(`${newPathname}?${searchParams}`);
   };
+
+  const handleLogout = () => {
+    // Clear cookies or tokens
+    nookies.destroy(null, "token");
+    setIsLoggedIn(false);
+    router.push(`/${currentLocale}/login`); // Redirect to login page
+  };
+
+  const toggleLoginModal = () => setLoginModalOpen(!isLoginModalOpen);
 
   const menuButtonStyle = {
     marginLeft: "2rem",
@@ -130,6 +144,14 @@ const Navbar = () => {
                 />
                 <span>Türkçe</span>
               </li>
+              {isLoggedIn && (
+                <li
+                  className="flex cursor-pointer items-center px-4 py-2 text-red-600 hover:bg-gray-200"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -143,9 +165,10 @@ const Navbar = () => {
               alt="Logo"
               width={100}
               height={100}
-              className="cursor-pointer"
+              className="h-auto max-w-[100px] cursor-pointer sm:max-w-[120px] md:max-w-[150px] lg:max-w-[180px]"
             />
           </Link>
+
           <ul className="hidden space-x-8 px-8 font-bold text-black md:flex lg:flex xl:flex">
             <motion.li whileHover={{ scale: 1.2 }}>
               <Link href={`/${currentLocale}`}>{t("navbarHome")}</Link>
@@ -159,9 +182,28 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex items-center justify-center">
+          {isLoggedIn ? (
+            <Link href={`/${currentLocale}/account`}>
+              <motion.button
+                className="px-8 font-bold text-black md:flex lg:flex xl:flex"
+                whileHover={{ scale: 1.2 }}
+              >
+                {t("navbarAccount")}
+              </motion.button>
+            </Link>
+          ) : (
+            <Link href={`/${currentLocale}/login`}>
+              <motion.button
+                className="px-8 font-bold text-black md:flex lg:flex xl:flex"
+                whileHover={{ scale: 1.2 }}
+              >
+                {t("navbarLogin")}
+              </motion.button>
+            </Link>
+          )}
           <Link href={`/${currentLocale}/appointment`}>
             <motion.button
-              className="text-md hidden flex-row items-center space-x-8 rounded-xl border-2 border-[#0fa94b] bg-[#0fa94b] px-6 py-4 font-bold text-white md:flex lg:flex xl:flex"
+              className={`hidden flex-row items-center justify-center space-x-2 rounded-lg border-2 border-[#0fa94b] bg-[#0fa94b] font-bold text-white md:flex ${currentLocale === "en" ? "w-[300px]" : "w-[300px]"} h-[75px]`}
               whileHover={{
                 backgroundColor: "#176937f1",
                 color: "#FFFFFF",
@@ -170,7 +212,7 @@ const Navbar = () => {
               transition={{ ease: "easeInOut", duration: 0.3 }}
             >
               {t("navbarAppointment")}
-              <MdEditCalendar className="h-8 w-8" />
+              <MdEditCalendar className="h-6 w-6 sm:h-8 sm:w-8" />
             </motion.button>
           </Link>
 

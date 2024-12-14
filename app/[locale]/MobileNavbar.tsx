@@ -55,24 +55,62 @@ const MobileNavbar = ({ isOpen, setOpen }: MobileNavbarProps) => {
         <motion.div className="flex h-full flex-col items-center justify-center space-y-10">
           <motion.div variants={itemVariants}>
             <Link href="/" onClick={() => setOpen(false)}>
-              <h2 className="text-2xl font-bold">{t("navbarHome")}</h2>
+              <motion.h2
+                className="text-2xl font-bold"
+                whileHover={{
+                  scale: 1.2, // Slight scaling effect
+                  rotate: 3, // Subtle rotation
+                  color: "#FFD700", // Change text color
+                }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {t("navbarHome")}
+              </motion.h2>
             </Link>
           </motion.div>
           <motion.div variants={itemVariants}>
             <Link href="/about" onClick={() => setOpen(false)}>
-              <h2 className="text-2xl font-bold">{t("navbarAbout")}</h2>
+              <motion.h2
+                className="text-2xl font-bold"
+                whileHover={{
+                  scale: 1.2,
+                  rotate: -3,
+                  color: "#FFD700",
+                }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {t("navbarAbout")}
+              </motion.h2>
             </Link>
           </motion.div>
           <motion.div variants={itemVariants}>
             <Link href="/services" onClick={() => setOpen(false)}>
-              <h2 className="text-2xl font-bold">{t("navbarServices")}</h2>
+              <motion.h2
+                className="text-2xl font-bold"
+                whileHover={{
+                  scale: 1.2,
+                  rotate: 3,
+                  color: "#FFD700",
+                }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {t("navbarServices")}
+              </motion.h2>
             </Link>
           </motion.div>
           <motion.div variants={itemVariants}>
             <Link href="/appointment" onClick={() => setOpen(false)}>
-              <h2 className="text-2xl font-bold uppercase">
+              <motion.h2
+                className="text-2xl font-bold uppercase"
+                whileHover={{
+                  scale: 1.2,
+                  rotate: -3,
+                  color: "#FFD700",
+                }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
                 {t("navbarAppointment")}
-              </h2>
+              </motion.h2>
             </Link>
           </motion.div>
         </motion.div>

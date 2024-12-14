@@ -19,7 +19,23 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 import nookies from "nookies";
 
+const isSmallDevice = () => window.matchMedia("(max-width: 639px)").matches;
+
 const FormStep = () => {
+  const [isSm, setIsSm] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen size is `sm` or smaller
+    const updateIsSm = () => setIsSm(isSmallDevice());
+    updateIsSm();
+
+    // Add resize event listener
+    window.addEventListener("resize", updateIsSm);
+    return () => {
+      window.removeEventListener("resize", updateIsSm);
+    };
+  }, []);
+
   const t = useTranslations("register");
 
   const [currentLocale, setCurrentLocale] = useState("en");
@@ -83,9 +99,15 @@ const FormStep = () => {
         setStep(2);
       }
     } else if (step === 2) {
+      const requirements = passwordMeetsRequirements(formData.password);
       const errors = {
         email: !formData.email || !isValidEmail(formData.email),
-        password: !formData.password,
+        password:
+          !formData.password ||
+          !requirements.hasUppercase ||
+          !requirements.hasNumber ||
+          !requirements.hasSymbol ||
+          !requirements.hasMin,
         confirmPassword:
           !formData.confirmPassword ||
           formData.password !== formData.confirmPassword,
@@ -153,7 +175,7 @@ const FormStep = () => {
     setShowConfirmPassword((prev) => !prev);
   };
 
-  const [formType, setFormType] = useState<"register" | "login">("register");
+  const [formType, setFormType] = useState<"register" | "login">("login");
 
   const handleLogin = () => {
     const isEmailValid = isValidEmail(formData.email);
@@ -169,7 +191,7 @@ const FormStep = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex items-center justify-center bg-gray-100 p-8">
       <AnimatePresence mode="wait">
         {formType === "register" ? (
           <motion.div
@@ -178,7 +200,7 @@ const FormStep = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.5 }}
-            className="flex min-h-[50vh] w-full max-w-5xl rounded-lg bg-white shadow-lg"
+            className="flex w-full rounded-lg bg-white shadow-lg"
           >
             <div className="flex w-full flex-col">
               <div className="flex w-full items-center rounded-t-lg text-white">
@@ -211,77 +233,68 @@ const FormStep = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex min-h-[50vh] w-full flex-row border p-4">
-                <div className="flex w-1/3 flex-grow rounded-xl bg-[#C2272C] p-8 text-white">
-                  <div className="space-y-8">
-                    <div className="flex items-center space-x-3">
+              <div className="flex min-h-[60vh] w-full flex-col p-4 md:flex-row lg:flex-row xl:flex-row">
+                <motion.div className="flex w-full rounded-xl bg-[#C2272C] p-8 text-white md:w-1/3 lg:w-1/3 xl:w-1/3">
+                  <motion.div className="flex w-full flex-row items-center justify-between space-y-0 sm:min-h-12 md:flex-col md:justify-start md:space-y-10 lg:flex-col lg:justify-start lg:space-y-8 xl:flex-col xl:justify-start xl:space-y-8">
+                    {[1, 2, 3].map((currentStep) => (
                       <motion.div
-                        initial={{ scale: 1 }}
-                        animate={{ scale: step >= 1 ? 1.2 : 1 }}
-                        className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                          step >= 1 ? "bg-[#6d1619]" : "bg-transparent"
-                        } font-bold text-white`}
-                      >
-                        1
-                      </motion.div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-light">
-                          {t("step_one")}
-                        </span>
-                        <span className="text-base font-semibold uppercase">
-                          {t("personal_info")}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <motion.div
-                        initial={{ scale: 1 }}
+                        key={currentStep}
+                        className="flex w-1/3 items-center justify-center md:w-full md:justify-start lg:w-full lg:justify-start xl:w-full xl:justify-start"
                         animate={{
-                          scale: step >= 2 ? 1.2 : 1,
-                          backgroundColor:
-                            step >= 2 ? "#6d1619" : "transparent",
-                          borderColor: step >= 2 ? "#6d1619" : "white",
+                          x: step === currentStep ? 0 : 25,
+                          opacity: step === currentStep ? 1 : 0.5, // Highlight active
                         }}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border font-bold text-white"
+                        transition={{ duration: 0.5, ease: "easeInOut" }} // Smooth transition
                       >
-                        2
+                        <motion.div
+                          initial={{ scale: 1 }}
+                          animate={{
+                            scale: step >= currentStep ? 1.2 : 1,
+                            backgroundColor:
+                              step >= currentStep ? "#6d1619" : "transparent",
+                            borderColor:
+                              step >= currentStep ? "#6d1619" : "white",
+                          }}
+                          transition={{ duration: 0.3 }}
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-bold text-white"
+                        >
+                          {currentStep}
+                        </motion.div>
+                        <motion.div
+                          className="flex flex-col px-2"
+                          initial={{ opacity: 0, y: 0 }} // Start hidden and slightly above
+                          animate={{
+                            opacity: isSm
+                              ? step === currentStep
+                                ? 1
+                                : 0 // For `sm` devices
+                              : step === currentStep
+                                ? 1
+                                : 50,
+                            y: step === currentStep ? 0 : 0,
+                          }}
+                          transition={{ duration: 0.5, ease: "easeInOut" }}
+                        >
+                          <span className="text-xs font-light">
+                            {t(
+                              `step_${["one", "two", "three"][currentStep - 1]}`,
+                            )}
+                          </span>
+                          <span className="text-sm font-semibold uppercase md:text-base lg:text-base xl:text-base">
+                            {t(
+                              ["personal_info", "login_info", "review"][
+                                currentStep - 1
+                              ],
+                            )}
+                          </span>
+                        </motion.div>
                       </motion.div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-light">
-                          {t("step_two")}
-                        </span>
-                        <span className="text-base font-semibold uppercase">
-                          {t("login_info")}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <motion.div
-                        initial={{ scale: 1 }}
-                        animate={{
-                          scale: step >= 3 ? 1.2 : 1,
-                          backgroundColor:
-                            step >= 3 ? "#6d1619" : "transparent",
-                          borderColor: step >= 3 ? "#6d1619" : "white",
-                        }}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white bg-transparent font-bold text-white"
-                      >
-                        3
-                      </motion.div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-light">
-                          {t("step_three")}
-                        </span>
-                        <span className="text-base font-semibold uppercase">
-                          {t("review")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    ))}
+                  </motion.div>
+                </motion.div>
 
                 {/* Form Section */}
-                <div className="flex w-2/3 flex-col justify-between p-10">
+                <div className="flex w-full flex-col justify-between p-10 md:w-2/3 lg:w-2/3 xl:w-2/3">
                   {step === 1 && (
                     <div className="flex flex-col">
                       <div className="flex flex-row justify-between">
@@ -306,8 +319,8 @@ const FormStep = () => {
                       </p>
                       <form className="space-y-4">
                         {/* Form fields for Personal Info */}
-                        <div className="flex w-full gap-4">
-                          <div className="w-1/2">
+                        <div className="flex w-full flex-col gap-4 md:flex-row lg:flex-row xl:flex-row">
+                          <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2">
                             <label className="mb-1 block text-black">
                               {t("first_name")}{" "}
                               <span className="text-red-500">*</span>
@@ -326,7 +339,7 @@ const FormStep = () => {
                               required
                             />
                           </div>
-                          <div className="w-1/2">
+                          <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2">
                             <label className="mb-1 block text-black">
                               {t("middle_name")}
                             </label>
@@ -640,7 +653,7 @@ const FormStep = () => {
                         {t("review_details")}
                       </p>
                       <div className="flex flex-col space-y-8">
-                        <div className="flex flex-row">
+                        <div className="flex flex-col space-y-8 md:flex-row md:space-y-0 lg:flex-row lg:space-y-0 xl:flex-row xl:space-y-0">
                           <div className="flex w-1/2">
                             <label className="mb-1 mr-2 block font-bold text-black">
                               {t("first_name") + ":"}
@@ -703,9 +716,8 @@ const FormStep = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.5 }}
-            className="flex min-h-[50vh] w-full max-w-5xl rounded-lg bg-white shadow-lg"
+            className="flex w-full rounded-lg bg-white shadow-lg"
           >
-            {" "}
             <div className="flex w-full flex-col">
               <div className="flex w-full items-center rounded-t-lg text-white">
                 <div
@@ -737,9 +749,9 @@ const FormStep = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex min-h-[50vh] w-full flex-row border p-4">
+              <div className="flex min-h-[60vh] w-full flex-col p-4 md:flex-row lg:flex-row xl:flex-row">
                 <div
-                  className="flex w-1/3 flex-grow rounded-xl p-8 text-white"
+                  className="flex w-full flex-grow rounded-xl p-8 text-white md:w-1/3 lg:w-1/3 xl:w-1/3"
                   style={{
                     backgroundImage: "url('/resources/accounting.png')",
                     backgroundSize: "cover",
@@ -754,7 +766,7 @@ const FormStep = () => {
                 </div>
 
                 {/* Form Section */}
-                <div className="flex w-2/3 flex-col justify-between p-10">
+                <div className="flex w-full flex-col justify-between p-10 md:w-2/3 lg:w-2/3 xl:w-2/3">
                   <div className="flex flex-col">
                     <div className="mb-6 flex flex-row justify-between">
                       <h2 className="text-2xl font-bold text-gray-800">

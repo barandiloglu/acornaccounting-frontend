@@ -5,14 +5,15 @@ import { routing } from "@/i18n/routing";
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-const inter = Inter ({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Acorn Accounting", // Website name shown in the tab
-  description: "Professional Accounting Services for Small and Medium Businesses.", // Website description
+  description:
+    "Professional Accounting Services for Small and Medium Businesses.", // Website description
   icons: {
     icon: "/favicon.ico", // Reference to your favicon file
   },
@@ -46,4 +47,3 @@ export default async function LocaleLayout({
     </html>
   );
 }
-

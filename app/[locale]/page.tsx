@@ -80,8 +80,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex max-w-[90rem] flex-col items-center justify-center space-y-8 p-8 text-black lg:flex-row lg:space-x-12 lg:space-y-0">
-        <div className="flex w-full flex-col space-y-4 lg:w-1/2">
+      <div className="flex max-w-[90rem] flex-col space-y-8 p-8 text-black lg:flex-row lg:space-x-12 lg:space-y-0">
+        <div className="flex w-full flex-col space-y-4 md:w-2/3 lg:w-2/3 xl:w-2/3">
           <h1 className="text-3xl font-bold">About Us</h1>
           <p className="text-xl">
             SLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -108,7 +108,7 @@ export default function Home() {
         </div>
 
         {/* Image Section */}
-        <div className="flex w-full lg:w-1/3">
+        <div className="hidden w-full md:flex md:w-1/3 lg:flex lg:w-1/3 xl:flex xl:w-1/3">
           <img
             src="/resources/corporate-tax-returns.png"
             alt="About Us"
