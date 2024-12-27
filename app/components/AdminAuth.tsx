@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
 import axios from "axios";
+import nookies from "nookies";
 
 const AdminAuth = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -14,17 +14,32 @@ const AdminAuth = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuthorization = async () => {
       try {
-        const response = await axios.get("/api/admin/check-auth", {
-          withCredentials: true, // Include cookies
-        });
+        // Retrieve the token from cookies
+        const cookies = nookies.get();
+        const token = cookies.token;
+
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const response = await axios.get(
+          "http://localhost:9090/api/admin/check-auth",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Pass token from cookies
+            },
+            withCredentials: true, // Include credentials (cookies)
+          },
+        );
 
         if (response.data.role === "admin") {
           setIsAuthorized(true);
         } else {
-          router.push("/not-authorized"); // Redirect if not admin
+          router.push("/"); // Redirect non-admin users
         }
       } catch (error) {
-        router.push("/login"); // Redirect to login if not authenticated
+        console.error("Authorization check failed", error);
+        router.push("/login"); // Redirect unauthenticated users to login
       } finally {
         setIsLoading(false); // Stop loading state
       }

@@ -24,8 +24,6 @@ const Navbar = () => {
   const [currentLocale, setCurrentLocale] = useState("en");
   const [isOpen, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false); // State for login modal
-
   const router = useRouter();
   const pathname = usePathname(); // For current path
   const searchParams = useSearchParams(); // For query params
@@ -51,16 +49,9 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Clear cookies or tokens
-    nookies.destroy(null, "token");
-    setIsLoggedIn(false);
+    nookies.destroy(null, "token", { path: "/" }); // Remove the token
+    setIsLoggedIn(false); // Update state immediately
     router.push(`/${currentLocale}/login`); // Redirect to login page
-  };
-
-  const toggleLoginModal = () => setLoginModalOpen(!isLoginModalOpen);
-
-  const menuButtonStyle = {
-    marginLeft: "2rem",
   };
 
   return (
@@ -78,7 +69,6 @@ const Navbar = () => {
             <span className="text-sm">+1 (647) 468-0737</span>
           </div>
         </div>
-
         <div className="flex items-center space-x-4">
           <div className="relative">
             <motion.div
@@ -103,7 +93,6 @@ const Navbar = () => {
                 </svg>
               </motion.div>
             </motion.div>
-
             <ul
               id="language-dropdown"
               className="absolute right-0 mt-2 hidden w-32 rounded-lg border border-gray-200 bg-white text-black shadow-lg"
@@ -144,19 +133,10 @@ const Navbar = () => {
                 />
                 <span>Türkçe</span>
               </li>
-              {isLoggedIn && (
-                <li
-                  className="flex cursor-pointer items-center px-4 py-2 text-red-600 hover:bg-gray-200"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </li>
-              )}
             </ul>
           </div>
         </div>
       </div>
-
       <div className="flex flex-row items-center justify-between bg-white px-4 py-2">
         <div className="flex items-center">
           <Link href="/">
@@ -168,7 +148,6 @@ const Navbar = () => {
               className="h-auto max-w-[100px] cursor-pointer sm:max-w-[120px] md:max-w-[150px] lg:max-w-[180px]"
             />
           </Link>
-
           <ul className="hidden space-x-8 px-8 font-bold text-black md:flex lg:flex xl:flex">
             <motion.li whileHover={{ scale: 1.2 }}>
               <Link href={`/${currentLocale}`}>{t("navbarHome")}</Link>
@@ -183,14 +162,13 @@ const Navbar = () => {
         </div>
         <div className="flex items-center justify-center">
           {isLoggedIn ? (
-            <Link href={`/${currentLocale}/account`}>
-              <motion.button
-                className="px-8 font-bold text-black md:flex lg:flex xl:flex"
-                whileHover={{ scale: 1.2 }}
-              >
-                {t("navbarAccount")}
-              </motion.button>
-            </Link>
+            <motion.button
+              className="px-8 font-bold text-black md:flex lg:flex xl:flex"
+              onClick={handleLogout}
+              whileHover={{ scale: 1.2 }}
+            >
+              {t("navbarLogout")}
+            </motion.button>
           ) : (
             <Link href={`/${currentLocale}/login`}>
               <motion.button
@@ -215,7 +193,6 @@ const Navbar = () => {
               <MdEditCalendar className="h-6 w-6 sm:h-8 sm:w-8" />
             </motion.button>
           </Link>
-
           <button className="z-50 flex md:hidden lg:hidden xl:hidden 2xl:hidden">
             <MenuButton
               isOpen={isOpen}
@@ -224,7 +201,6 @@ const Navbar = () => {
               color={isOpen ? "#FFFFFF" : "#C2272C"}
               lineProps={{ strokeLinecap: "round" }}
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              style={menuButtonStyle}
             />
           </button>
         </div>

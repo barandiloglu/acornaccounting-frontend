@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import nookies from "nookies";
+import axios from "axios";
 
 const isSmallDevice = () => window.matchMedia("(max-width: 639px)").matches;
 
@@ -177,7 +178,7 @@ const FormStep = () => {
 
   const [formType, setFormType] = useState<"register" | "login">("login");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const isEmailValid = isValidEmail(formData.email);
 
     setValidationErrors((prevErrors) => ({
@@ -186,7 +187,36 @@ const FormStep = () => {
     }));
 
     if (isEmailValid) {
-      console.log("Logging in...");
+      try {
+        // Authenticate the user and get the token
+        const response = await axios.post(
+          "http://localhost:9090/api/auth/login",
+          {
+            email: formData.email,
+            password: formData.password,
+          },
+        );
+
+        const { token, role } = response.data;
+
+        // Save the token to cookies for later use
+        nookies.set(null, "token", token, {
+          path: "/", // Makes the cookie available site-wide
+          httpOnly: false, // Ensures it can't be accessed via JavaScript
+          secure: false, // Use secure cookies in production
+          maxAge: 60 * 60 * 6, // Token expiry in seconds (e.g., 1 day)
+        });
+
+        // Redirect based on the role
+        if (role === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/user-dashboard");
+        }
+      } catch (error) {
+        console.error("Login failed", error);
+        alert("Invalid credentials. Please try again.");
+      }
     }
   };
 
